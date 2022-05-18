@@ -1,0 +1,27 @@
+version: "3.5"
+
+services:
+  postgres-kbase:
+    image: postgres:14
+    container_name: postgres-kbase
+    restart: always
+    environment:
+      POSTGRES_DB: kbase
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+    volumes:
+      - ./docker-volumes/postgres-kbase-data:/var/lib/postgresql/data
+      - ./postgres/postgresql.conf:/etc/postgresql/postgresql.conf
+    ports:
+      - ${POSTGRES_PORT}:5432
+    networks:
+      kbase-net:
+        ipv4_address: 172.28.1.1
+
+networks:
+  kbase-net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16

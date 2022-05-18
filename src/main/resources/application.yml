@@ -1,0 +1,22 @@
+debug: ${SPRING_DEBUG:false}
+server:
+  port: 8080
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: kbase
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 100
+    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    show-sql: ${SPRING_DEBUG:true}
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    enabled: false
+    change-log: classpath:db/db.changelog-master-postgres.yaml
