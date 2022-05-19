@@ -8,18 +8,26 @@ spring:
     name: kbase
   datasource:
     driver-class-name: org.postgresql.Driver
-    hikari:
-      maximum-pool-size: 100
-    url: ${POSTGRES_URL}
+#    hikari:
+#      maximum-pool-size: 100
+    url: ${POSTGRES_URL}?currentSchema=${POSTGRES_SCHEMA:kbase}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
   jpa:
     show-sql: ${SPRING_DEBUG:true}
     hibernate:
       ddl-auto: validate
+#  sql:
+#    init:
+#      mode: always
   liquibase:
-    enabled: false
-    change-log: classpath:db/db.changelog-master-postgres.yaml
+    enabled: true
+    change-log: classpath:db/db.changelog-master.xml
+    default-schema: ${POSTGRES_SCHEMA:kbase}
+#  redis:
+#    database: 0
+#    host: localhost
+#    port: 6379
 
 springdoc:
   api-docs:

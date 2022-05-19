@@ -4,7 +4,7 @@ services:
   postgres-kbase:
     image: postgres:14
     container_name: postgres-kbase
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_DB: kbase
       POSTGRES_USER: postgres
@@ -18,6 +18,20 @@ services:
     networks:
       kbase-net:
         ipv4_address: 172.28.1.1
+
+  redis-kbase:
+    image: redis:7.0
+    container_name: redis-kbase
+    restart: unless-stopped
+#    command: redis-server --include /usr/local/etc/redis/redis.conf
+    volumes:
+#      - ./myRedis:/usr/local/etc/redis
+      - ./docker-volumes/redis-kbase-data:/data
+    ports:
+      - ${REDIS_PORT}:6379
+    networks:
+      kbase-net:
+        ipv4_address: 172.28.1.2
 
 networks:
   kbase-net:
