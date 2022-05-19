@@ -20,9 +20,16 @@
 		<org.projectlombok.version>1.18.24</org.projectlombok.version>
 		<com.vladmihalcea.version>2.16.2</com.vladmihalcea.version>
 		<org.apache.commons.version>4.4</org.apache.commons.version>
+		<io.swagger.core.v3.version>2.2.0</io.swagger.core.v3.version>
+		<org.springdoc.version>1.6.8</org.springdoc.version>
+		<com.fasterxml.jackson.core.version>2.13.3</com.fasterxml.jackson.core.version>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -83,12 +90,16 @@
 			<artifactId>commons-collections4</artifactId>
 			<version>${org.apache.commons.version}</version>
 		</dependency>
-
-<!--		<dependency>-->
-<!--			<groupId>org.springdoc</groupId>-->
-<!--			<artifactId>springdoc-openapi-ui</artifactId>-->
-<!--			<version>1.5.9</version>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>${org.springdoc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${com.fasterxml.jackson.core.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -104,6 +115,13 @@
 						</exclude>
 					</excludes>
 				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>build-info</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

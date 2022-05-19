@@ -20,3 +20,23 @@ spring:
   liquibase:
     enabled: false
     change-log: classpath:db/db.changelog-master-postgres.yaml
+
+springdoc:
+  api-docs:
+    path: /api-docs
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:
+    git:
+      mode: full
+
+app:
+  url: ${APP_URL}
+  api-path: ${API_PATH:/}
