@@ -2,10 +2,12 @@ package com.home.knowbase.entity;
 
 import com.home.knowbase.enums.Role;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Getter
+@Setter
 @Entity
 @Table(name = "\"user\"")
 public class User {
@@ -25,7 +27,6 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToOne
-    @JoinColumn(name = "user_token_id", referencedColumnName = "id")
-    private UserToken token;
+    @Column(name = "mail")
+    private String mail;
 }

@@ -13,6 +13,7 @@ services:
     volumes:
       - ./docker-volumes/postgres-kbase-data:/var/lib/postgresql/data
       - ./postgres/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - ${POSTGRES_PORT}:5432
     networks:

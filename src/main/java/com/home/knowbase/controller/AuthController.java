@@ -1,7 +1,7 @@
 package com.home.knowbase.controller;
 
-import com.home.knowbase.dto.AuthDTO;
 import com.home.knowbase.dto.CredentialDTO;
+import com.home.knowbase.dto.UserTokenDTO;
 import com.home.knowbase.security.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +17,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping
-    public AuthDTO authenticate(@RequestBody CredentialDTO credentialDTO) {
+    public UserTokenDTO authenticate(@RequestBody CredentialDTO credentialDTO) {
         return authService.authenticate(credentialDTO);
     }
 }

@@ -1,12 +1,14 @@
 package com.home.knowbase.entity;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.UUID;
 
 @Getter
+@Setter
 @Entity
 @Table(name = "user_token")
 public class UserToken {
@@ -22,6 +24,7 @@ public class UserToken {
     @Column(name = "expires_at")
     private Instant expiresAt;
 
-    @OneToOne(mappedBy = "token")
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 }
