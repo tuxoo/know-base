@@ -82,11 +82,6 @@
 			<artifactId>liquibase-core</artifactId>
 			<version>${org.liquibase.version}</version>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>redis.clients</groupId>-->
-<!--			<artifactId>jedis</artifactId>-->
-<!--			<version>${redis.clients.version}</version>-->
-<!--		</dependency>-->
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
