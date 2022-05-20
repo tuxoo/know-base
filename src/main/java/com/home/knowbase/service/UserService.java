@@ -5,6 +5,7 @@ import com.home.knowbase.entity.User;
 import com.home.knowbase.mapper.UserMapper;
 import com.home.knowbase.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ public class UserService {
     private final UserMapper userMapper;
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "userCache", key = "#token", unless = "#result == null")
     public Optional<UserDTO> getUserByToken(UUID token) {
         return userRepository.findUserByToken(token).map(userMapper::toDTO);
     }

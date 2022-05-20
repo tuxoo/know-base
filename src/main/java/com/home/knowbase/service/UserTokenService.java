@@ -6,6 +6,7 @@ import com.home.knowbase.entity.UserToken;
 import com.home.knowbase.mapper.UserTokenMapper;
 import com.home.knowbase.repository.UserTokenRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ public class UserTokenService {
     private final UserTokenMapper userTokenMapper;
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "userTokenCache", key = "#userId", unless = "#result == null")
     public Optional<UserTokenDTO> getTokenByUserId(Long userId) {
         return userTokenRepository.findUserTokenByUserId(userId).map(userTokenMapper::toDTO);
     }
