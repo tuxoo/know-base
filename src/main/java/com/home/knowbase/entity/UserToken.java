@@ -25,6 +25,6 @@ public class UserToken {
     private Instant expiresAt;
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", unique = true, referencedColumnName = "id")
     private User user;
 }

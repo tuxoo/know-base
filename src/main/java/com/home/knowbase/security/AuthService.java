@@ -31,6 +31,8 @@ public class AuthService {
         UserDTO user = userService.getUserByLogin(credential.login())
                 .orElseThrow(RuntimeException::new);
 
+        String st = passwordEncoder.encode("qwerty");
+
         if (!passwordEncoder.matches(credential.password(), user.password())) {
             throw new RuntimeException();
         }
