@@ -26,8 +26,13 @@ spring:
     default-schema: ${POSTGRES_SCHEMA:kbase}
   redis:
     database: 0
-    host: localhost
-    port: 6379
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+    password: ${REDIS_PASSWORD}
+#  autoconfigure:
+#    exclude:
+#    - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+#    - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
 
 springdoc:
   api-docs:

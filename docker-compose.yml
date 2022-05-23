@@ -1,6 +1,21 @@
 version: "3.5"
 
 services:
+  app-kbase:
+    build: .
+    container_name: app-kbase
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      - postgres-kbase
+      - redis-kbase
+    ports:
+      - "8088:8080"
+    networks:
+      kbase-net:
+        ipv4_address: 172.28.1.1
+
   postgres-kbase:
     image: postgres:14
     container_name: postgres-kbase
@@ -18,21 +33,21 @@ services:
       - ${POSTGRES_PORT}:5432
     networks:
       kbase-net:
-        ipv4_address: 172.28.1.1
+        ipv4_address: 172.28.1.2
 
   redis-kbase:
     image: redis:7.0
     container_name: redis-kbase
     restart: unless-stopped
-#    command: redis-server --include /usr/local/etc/redis/redis.conf
+    command: redis-server --include /usr/local/etc/redis/redis.conf
     volumes:
-#      - ./myRedis:/usr/local/etc/redis
+      - ./redis:/usr/local/etc/redis
       - ./docker-volumes/redis-kbase-data:/data
     ports:
       - ${REDIS_PORT}:6379
     networks:
       kbase-net:
-        ipv4_address: 172.28.1.2
+        ipv4_address: 172.28.1.3
 
 networks:
   kbase-net:
