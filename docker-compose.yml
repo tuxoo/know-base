@@ -1,20 +1,20 @@
 version: "3.5"
 
 services:
-  app-kbase:
-    build: .
-    container_name: app-kbase
-    restart: unless-stopped
-    env_file:
-      - .env
-    depends_on:
-      - postgres-kbase
-      - redis-kbase
-    ports:
-      - "8088:8080"
-    networks:
-      kbase-net:
-        ipv4_address: 172.28.1.1
+#  nginx-kbase:
+#    image: nginx:1.21.6
+#    container_name: nginx-kbase
+#    restart: unless-stopped
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    volumes:
+#      - ./nginx/conf.d:/etc/nginx/conf.d
+#    depends_on:
+#      - know-base-service
+#    networks:
+#      kbase-net:
+#        ipv4_address: 172.28.1.1
 
   postgres-kbase:
     image: postgres:14
@@ -49,6 +49,20 @@ services:
       kbase-net:
         ipv4_address: 172.28.1.3
 
+  know-base-service:
+    build: know-base-service
+    container_name: know-base-service
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      - postgres-kbase
+      - redis-kbase
+    ports:
+      - "8080:8080"
+    networks:
+      kbase-net:
+        ipv4_address: 172.28.1.4
 networks:
   kbase-net:
     ipam:

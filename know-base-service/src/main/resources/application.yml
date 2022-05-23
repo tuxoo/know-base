@@ -1,0 +1,48 @@
+debug: ${SPRING_DEBUG:false}
+server:
+  port: 8080
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: kbase
+  datasource:
+    driver-class-name: org.postgresql.Driver
+#    hikari:
+#      maximum-pool-size: 100
+    url: ${POSTGRES_URL}?currentSchema=${POSTGRES_SCHEMA:kbase}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    show-sql: ${SPRING_DEBUG:true}
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    enabled: true
+    change-log: classpath:db/db.changelog-master.xml
+    default-schema: ${POSTGRES_SCHEMA:kbase}
+  redis:
+    database: 0
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+    password: ${REDIS_PASSWORD}
+
+springdoc:
+  api-docs:
+    path: /api-docs
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:
+    git:
+      mode: full
+
+app:
+  url: ${APP_URL}
+  api-path: ${API_PATH:/}
