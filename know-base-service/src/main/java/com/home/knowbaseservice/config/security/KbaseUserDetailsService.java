@@ -19,12 +19,12 @@ public class KbaseUserDetailsService implements UserDetailsService {
 
     @Override
     public KbaseUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserDTO user = userService.getByLoginEmailOrThrow(email);
+        UserDTO user = userService.getByLoginEmail(email);
         return KbaseUserDetails.toKbaseUserDetails(user);
     }
 
     public KbaseUserDetails loadUserById(UUID id) throws UsernameNotFoundException {
-        UserDTO user = userService.getByIdOrThrow(id);
+        UserDTO user = userService.getById(id);
         return KbaseUserDetails.toKbaseUserDetails(user);
     }
 }

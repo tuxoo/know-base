@@ -10,6 +10,7 @@ import com.home.knowbaseservice.model.entity.User;
 import com.home.knowbaseservice.model.entity.UserDTO;
 import com.home.knowbaseservice.model.enums.Role;
 import com.home.knowbaseservice.model.exception.InvalidCredentialException;
+import com.home.knowbaseservice.model.exception.UserNotFoundException;
 import com.home.knowbaseservice.model.mapper.UserMapper;
 import com.home.knowbaseservice.repository.UserRepository;
 import com.home.knowbaseservice.util.HashUtils;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,14 +56,14 @@ public class UserService {
     public UserDTO getUserProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         KbaseUserDetails details = (KbaseUserDetails) authentication.getPrincipal();
-        return getByIdOrThrow(details.getId());
+        return getById(details.getId());
     }
 
     @Transactional(readOnly = true)
     public TokenDTO signIn(SignInDTO signInDTO) {
         String passwordHash = HashUtils.HashSHA1(signInDTO.password());
 
-        UserDTO user = getByCredentials(signInDTO.email(), passwordHash)
+        UserDTO user = userRepository.findByCredentials(signInDTO.email(), passwordHash)
                 .map(userMapper::toDTO)
                 .orElseThrow(() -> new InvalidCredentialException("User not found by credentials"));
 
@@ -72,21 +74,17 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserDTO getByLoginEmailOrThrow(String email) {
+    public UserDTO getByLoginEmail(String email) {
         return userRepository.findActiveUserByLoginEmail(email)
                 .map(userMapper::toDTO)
-                .orElseThrow(() -> new RuntimeException("User not found by email"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found by id"));
     }
 
     @Transactional(readOnly = true)
-    public UserDTO getByIdOrThrow(UUID id) {
+    public UserDTO getById(UUID id) {
         Optional<UserDTO> user = userCache.findById(id.toString());
         return user.orElseGet(() -> userRepository.findById(id)
                 .map(userMapper::toDTO)
-                .orElseThrow(() -> new RuntimeException("User not found by id")));
-    }
-
-    private Optional<User> getByCredentials(String email, String password) {
-        return userRepository.findByCredentials(email, password);
+                .orElseThrow(() -> new UserNotFoundException("User not found by id")));
     }
 }

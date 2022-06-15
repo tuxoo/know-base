@@ -31,5 +31,10 @@ public class UserController {
     public UserDTO getUserProfile() {
         return userService.getUserProfile();
     }
+
+    @GetMapping("/{email}")
+    public UserDTO getUserByEmail(@PathVariable String email) {
+        return userService.getByLoginEmail(email);
+    }
 }
 
