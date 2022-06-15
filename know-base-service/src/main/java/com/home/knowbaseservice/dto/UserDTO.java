@@ -1,6 +1,14 @@
 package com.home.knowbaseservice.dto;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record UserDTO(Long id, String login, String password) implements Serializable {
+import java.io.Serializable;
+import java.time.Instant;
+
+public record UserDTO(
+        String name,
+        @JsonProperty("email") String loginEmail,
+        Instant registeredAt,
+        Instant visitedAt
+) implements Serializable {
 }

@@ -3,22 +3,21 @@ package com.home.knowbaseservice.repository;
 import com.home.knowbaseservice.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, UUID> {
 
-    @Query("SELECT u FROM User u where u.login = :login")
-    Optional<User> findUserIdByLogin(@Param("login") String login);
-
-    @Query("""
-            SELECT u FROM User u 
-            JOIN UserToken ut ON u.id = ut.id
-            WHERE ut.token = :token
+    @Query(value = """
+            SELECT u FROM User  u WHERE u.loginEmail=:email AND u.isEnabled=true
             """)
-    Optional<User> findUserByToken(@Param("token") UUID token);
+    Optional<User> findActiveUserByLoginEmail(String email);
+
+    @Query(value = """
+            SELECT u FROM User u WHERE u.loginEmail=:email AND u.passwordHash=:passwordHash AND u.isEnabled=true
+            """)
+    Optional<User> findByCredentials(String email, String passwordHash);
 }

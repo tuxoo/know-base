@@ -5,5 +5,5 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
 @ConfigurationProperties(prefix = "app")
-public record ApplicationProperty(String url, String apiPath) {
+public record ApplicationProperty(String url, String apiPath, String jwtSigningKey) {
 }

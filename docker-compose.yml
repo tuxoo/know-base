@@ -1,32 +1,17 @@
 version: "3.5"
 
 services:
-#  nginx-kbase:
-#    image: nginx:1.21.6
-#    container_name: nginx-kbase
-#    restart: unless-stopped
-#    ports:
-#      - "80:80"
-#      - "443:443"
-#    volumes:
-#      - ./nginx/conf.d:/etc/nginx/conf.d
-#    depends_on:
-#      - know-base-service
-#    networks:
-#      kbase-net:
-#        ipv4_address: 172.28.1.1
-
   postgres-kbase:
-    image: postgres:14
     container_name: postgres-kbase
+    image: postgres:${POSTGRES_VERSION}
     restart: unless-stopped
     environment:
-      POSTGRES_DB: kbase
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
     volumes:
-      - ./docker-volumes/postgres-kbase-data:/var/lib/postgresql/data
+      - ./.docker-volumes/postgres:/var/lib/postgresql/data
       - ./postgres/postgresql.conf:/etc/postgresql/postgresql.conf
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
@@ -35,23 +20,73 @@ services:
       kbase-net:
         ipv4_address: 172.28.1.2
 
+#  temporal-kbase:
+#    container_name: temporal-kbase
+#    image: temporalio/auto-setup:${TEMPORAL_VERSION}
+#    restart: unless-stopped
+#    environment:
+#      DB: kbase
+#      DB_PORT: ${POSTGRES_PORT}
+#      POSTGRES_USER: ${POSTGRES_USER}
+#      POSTGRES_PWD: ${POSTGRES_PASSWORD}
+#      POSTGRES_SEEDS: postgres
+#      DYNAMIC_CONFIG_FILE_PATH: config/temporal/dynamicconfig/development-sql.yaml
+#    depends_on:
+#      - postgres-kbase
+#    volumes:
+#      - ./temporal/dynamicconfig:/etc/temporal/config/dynamicconfig
+#    ports:
+#      - ${TEMPORAL_IO_PORT}:7233
+#    networks:
+#      kbase-net:
+#        ipv4_address: 172.28.1.3
+#
+#  temporal-admin-tools-kbase:
+#    container_name: temporal-admin-tools-kbase
+#    image: temporalio/admin-tools:${TEMPORAL_VERSION}
+#    restart: unless-stopped
+#    environment:
+#      TEMPORAL_CLI_ADDRESS: temporal-kbase:${TEMPORAL_IO_PORT}
+#    depends_on:
+#      - temporal-kbase
+#    networks:
+#      kbase-net:
+#        ipv4_address: 172.28.1.4
+#    stdin_open: true
+#    tty: true
+#
+#  temporal-web-kbase:
+#    container_name: temporal-web-kbase
+#    image: temporalio/web:${TEMPORAL_WEB_VERSION}
+#    restart: unless-stopped
+#    environment:
+#      TEMPORAL_GRPC_ENDPOINT: temporal-kbase:${TEMPORAL_IO_PORT}
+#      TEMPORAL_PERMIT_WRITE_API: true
+#    depends_on:
+#      - temporal-kbase
+#    ports:
+#      - ${TEMPORAL_WEB_PORT}:8088
+#    networks:
+#      kbase-net:
+#        ipv4_address: 172.28.1.5
+
   redis-kbase:
-    image: redis:7.0
     container_name: redis-kbase
+    image: redis:${REDIS_VERSION}
     restart: unless-stopped
     command: redis-server --include /usr/local/etc/redis/redis.conf
     volumes:
       - ./redis:/usr/local/etc/redis
-      - ./docker-volumes/redis-kbase-data:/data
+      - ./.docker-volumes/redis:/data
     ports:
       - ${REDIS_PORT}:6379
     networks:
       kbase-net:
-        ipv4_address: 172.28.1.3
+        ipv4_address: 172.28.1.6
 
   know-base-service:
-    build: know-base-service
     container_name: know-base-service
+    build: know-base-service
     restart: unless-stopped
     env_file:
       - .env
@@ -62,7 +97,8 @@ services:
       - "8080:8080"
     networks:
       kbase-net:
-        ipv4_address: 172.28.1.4
+        ipv4_address: 172.28.1.7
+
 networks:
   kbase-net:
     ipam:

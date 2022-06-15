@@ -8,8 +8,12 @@ spring:
     name: kbase
   datasource:
     driver-class-name: org.postgresql.Driver
-#    hikari:
-#      maximum-pool-size: 100
+    hikari:
+      maximum-pool-size: 4
+      minimum-idle: 5
+      idle-timeout: 30000
+      max-lifetime: 2000000
+      connection-timeout: 30000
     url: ${POSTGRES_URL}?currentSchema=${POSTGRES_SCHEMA:kbase}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
@@ -46,3 +50,5 @@ management:
 app:
   url: ${APP_URL}
   api-path: ${API_PATH:/}
+  jwt-signing-key: ${JWT_SIGNING_KEY}
+  token-ttl: ${TOKEN_TTL:4}

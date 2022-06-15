@@ -1,6 +1,6 @@
 package com.home.knowbaseservice.config;
 
-import com.home.knowbaseservice.security.TokenAuthenticationFilter;
+import com.home.knowbaseservice.security.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,18 +14,26 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final TokenAuthenticationFilter tokenAuthenticationFilter;
+    private final JwtFilter jwtFilter;
+
+//    private static final String[] AUTHORIZE_URIS = new String[]{
+//            , "/api/v1/user/sign-in"
+//    };
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests().antMatchers("/auth").permitAll()
-                .anyRequest()
-                .authenticated()
+        http
+                .httpBasic().disable()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .authorizeRequests()
+                .antMatchers("/api/v1/user/sign-up").permitAll()
+//                .anyRequest()
+//                .authenticated()
+                .and()
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
+
+
 }
