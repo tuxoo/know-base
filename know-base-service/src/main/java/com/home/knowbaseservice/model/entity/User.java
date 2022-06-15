@@ -1,6 +1,6 @@
-package com.home.knowbaseservice.entity;
+package com.home.knowbaseservice.model.entity;
 
-import com.home.knowbaseservice.enums.Role;
+import com.home.knowbaseservice.model.enums.Role;
 import lombok.Getter;
 import lombok.Setter;
 

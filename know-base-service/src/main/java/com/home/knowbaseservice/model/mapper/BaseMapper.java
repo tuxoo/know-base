@@ -1,4 +1,4 @@
-package com.home.knowbaseservice.mapper;
+package com.home.knowbaseservice.model.mapper;
 
 public interface BaseMapper<E, D> {
 

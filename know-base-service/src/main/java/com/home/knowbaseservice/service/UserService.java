@@ -1,16 +1,16 @@
 package com.home.knowbaseservice.service;
 
-import com.home.knowbaseservice.dto.SignInDTO;
-import com.home.knowbaseservice.dto.SignUpDTO;
-import com.home.knowbaseservice.dto.TokenDTO;
-import com.home.knowbaseservice.dto.UserDTO;
-import com.home.knowbaseservice.entity.User;
-import com.home.knowbaseservice.enums.Role;
-import com.home.knowbaseservice.exception.InvalidCredentialException;
-import com.home.knowbaseservice.mapper.UserMapper;
+import com.home.knowbaseservice.model.dto.SignInDTO;
+import com.home.knowbaseservice.model.dto.SignUpDTO;
+import com.home.knowbaseservice.model.dto.TokenDTO;
+import com.home.knowbaseservice.model.dto.UserDTO;
+import com.home.knowbaseservice.model.entity.User;
+import com.home.knowbaseservice.model.enums.Role;
+import com.home.knowbaseservice.model.exception.InvalidCredentialException;
+import com.home.knowbaseservice.model.mapper.UserMapper;
 import com.home.knowbaseservice.repository.UserRepository;
-import com.home.knowbaseservice.security.JwtProvider;
-import com.home.knowbaseservice.security.KbaseUserDetails;
+import com.home.knowbaseservice.config.security.JwtProvider;
+import com.home.knowbaseservice.config.security.KbaseUserDetails;
 import com.home.knowbaseservice.util.HashUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
-package com.home.knowbaseservice.security;
+package com.home.knowbaseservice.config.security;
 
-import com.home.knowbaseservice.enums.Auth;
+import com.home.knowbaseservice.model.enums.Auth;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

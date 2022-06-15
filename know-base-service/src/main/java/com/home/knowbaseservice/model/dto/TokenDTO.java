@@ -1,4 +1,4 @@
-package com.home.knowbaseservice.dto;
+package com.home.knowbaseservice.model.dto;
 
 import lombok.Builder;
 

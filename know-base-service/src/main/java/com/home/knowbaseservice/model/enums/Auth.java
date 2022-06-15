@@ -1,4 +1,4 @@
-package com.home.knowbaseservice.enums;
+package com.home.knowbaseservice.model.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

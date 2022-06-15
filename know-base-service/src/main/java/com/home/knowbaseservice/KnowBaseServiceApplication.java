@@ -1,9 +1,9 @@
 package com.home.knowbaseservice;
 
 
-import com.home.knowbaseservice.properties.ApplicationProperty;
-import com.home.knowbaseservice.properties.LiquibaseProperty;
-import com.home.knowbaseservice.properties.RedisProperty;
+import com.home.knowbaseservice.config.properties.ApplicationProperty;
+import com.home.knowbaseservice.config.properties.LiquibaseProperty;
+import com.home.knowbaseservice.config.properties.RedisProperty;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

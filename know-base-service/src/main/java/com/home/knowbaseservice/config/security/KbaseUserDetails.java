@@ -1,6 +1,6 @@
-package com.home.knowbaseservice.security;
+package com.home.knowbaseservice.config.security;
 
-import com.home.knowbaseservice.entity.User;
+import com.home.knowbaseservice.model.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

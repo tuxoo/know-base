@@ -1,6 +1,6 @@
 package com.home.knowbaseservice.config;
 
-import com.home.knowbaseservice.security.JwtFilter;
+import com.home.knowbaseservice.config.security.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

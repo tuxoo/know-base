@@ -1,6 +1,6 @@
-package com.home.knowbaseservice.security;
+package com.home.knowbaseservice.config.security;
 
-import com.home.knowbaseservice.entity.User;
+import com.home.knowbaseservice.model.entity.User;
 import com.home.knowbaseservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

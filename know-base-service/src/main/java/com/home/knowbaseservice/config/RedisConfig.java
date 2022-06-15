@@ -1,6 +1,6 @@
 package com.home.knowbaseservice.config;
 
-import com.home.knowbaseservice.properties.RedisProperty;
+import com.home.knowbaseservice.config.properties.RedisProperty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
 import org.springframework.context.annotation.Bean;

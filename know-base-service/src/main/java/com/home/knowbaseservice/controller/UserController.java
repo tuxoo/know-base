@@ -1,9 +1,9 @@
 package com.home.knowbaseservice.controller;
 
-import com.home.knowbaseservice.dto.SignInDTO;
-import com.home.knowbaseservice.dto.SignUpDTO;
-import com.home.knowbaseservice.dto.TokenDTO;
-import com.home.knowbaseservice.dto.UserDTO;
+import com.home.knowbaseservice.model.dto.SignInDTO;
+import com.home.knowbaseservice.model.dto.SignUpDTO;
+import com.home.knowbaseservice.model.dto.TokenDTO;
+import com.home.knowbaseservice.model.dto.UserDTO;
 import com.home.knowbaseservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
