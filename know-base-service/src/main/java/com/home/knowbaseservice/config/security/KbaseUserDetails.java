@@ -1,6 +1,6 @@
 package com.home.knowbaseservice.config.security;
 
-import com.home.knowbaseservice.model.entity.User;
+import com.home.knowbaseservice.model.entity.UserDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,16 +13,14 @@ public class KbaseUserDetails implements UserDetails {
 
     private UUID id;
     private String login;
-    private String password;
     private Boolean isEnabled;
     private Collection<? extends GrantedAuthority> grantedAuthorities;
 
-    public static KbaseUserDetails toKbaseUserDetails(User user) {
+    public static KbaseUserDetails toKbaseUserDetails(UserDTO user) {
         KbaseUserDetails userDetails = new KbaseUserDetails();
         userDetails.id = user.getId();
         userDetails.login = user.getLoginEmail();
-        userDetails.password = user.getPasswordHash();
-        userDetails.isEnabled = user.getIsEnabled();
+        userDetails.isEnabled = user.isEnabled();
         userDetails.grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()));
         return userDetails;
     }
@@ -38,7 +36,7 @@ public class KbaseUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return "";
     }
 
     @Override

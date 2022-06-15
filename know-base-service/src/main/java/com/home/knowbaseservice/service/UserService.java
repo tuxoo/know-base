@@ -1,16 +1,17 @@
 package com.home.knowbaseservice.service;
 
+import com.home.knowbaseservice.cache.UserDTOCache;
+import com.home.knowbaseservice.config.security.JwtProvider;
+import com.home.knowbaseservice.config.security.KbaseUserDetails;
 import com.home.knowbaseservice.model.dto.SignInDTO;
 import com.home.knowbaseservice.model.dto.SignUpDTO;
 import com.home.knowbaseservice.model.dto.TokenDTO;
-import com.home.knowbaseservice.model.dto.UserDTO;
 import com.home.knowbaseservice.model.entity.User;
+import com.home.knowbaseservice.model.entity.UserDTO;
 import com.home.knowbaseservice.model.enums.Role;
 import com.home.knowbaseservice.model.exception.InvalidCredentialException;
 import com.home.knowbaseservice.model.mapper.UserMapper;
 import com.home.knowbaseservice.repository.UserRepository;
-import com.home.knowbaseservice.config.security.JwtProvider;
-import com.home.knowbaseservice.config.security.KbaseUserDetails;
 import com.home.knowbaseservice.util.HashUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class UserService {
 
     private final UserMapper userMapper;
     private final UserRepository userRepository;
+    private final UserDTOCache userCache;
     private final JwtProvider jwtProvider;
 
     @Transactional
@@ -48,36 +50,40 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional(readOnly = true)
     public UserDTO getUserProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         KbaseUserDetails details = (KbaseUserDetails) authentication.getPrincipal();
-        User user = userRepository.findById(details.getId())
-                .orElseThrow(() -> new RuntimeException("Incorrect user in system"));
-        return userMapper.toDTO(user);
+        return getByIdOrThrow(details.getId());
     }
 
     @Transactional(readOnly = true)
     public TokenDTO signIn(SignInDTO signInDTO) {
         String passwordHash = HashUtils.HashSHA1(signInDTO.password());
 
-        User user = getByCredentials(signInDTO.email(), passwordHash)
+        UserDTO user = getByCredentials(signInDTO.email(), passwordHash)
+                .map(userMapper::toDTO)
                 .orElseThrow(() -> new InvalidCredentialException("User not found by credentials"));
 
-        return TokenDTO.builder()
-                .token(jwtProvider.generateToken(user.getId().toString()))
-                .build();
+        userCache.save(user);
+
+        String token = jwtProvider.generateToken(user.getId().toString());
+        return new TokenDTO(token);
     }
 
     @Transactional(readOnly = true)
-    public User getByLoginEmailOrThrow(String email) {
+    public UserDTO getByLoginEmailOrThrow(String email) {
         return userRepository.findActiveUserByLoginEmail(email)
+                .map(userMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("User not found by email"));
     }
 
     @Transactional(readOnly = true)
-    public User getByIdOrThrow(UUID id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found by id"));
+    public UserDTO getByIdOrThrow(UUID id) {
+        Optional<UserDTO> user = userCache.findById(id.toString());
+        return user.orElseGet(() -> userRepository.findById(id)
+                .map(userMapper::toDTO)
+                .orElseThrow(() -> new RuntimeException("User not found by id")));
     }
 
     private Optional<User> getByCredentials(String email, String password) {

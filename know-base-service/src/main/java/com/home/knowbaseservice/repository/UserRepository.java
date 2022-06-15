@@ -11,12 +11,12 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 
-    @Query(value = """
+    @Query("""
             SELECT u FROM User  u WHERE u.loginEmail=:email AND u.isEnabled=true
             """)
     Optional<User> findActiveUserByLoginEmail(String email);
 
-    @Query(value = """
+    @Query("""
             SELECT u FROM User u WHERE u.loginEmail=:email AND u.passwordHash=:passwordHash AND u.isEnabled=true
             """)
     Optional<User> findByCredentials(String email, String passwordHash);

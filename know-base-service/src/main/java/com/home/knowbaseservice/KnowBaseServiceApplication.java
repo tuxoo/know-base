@@ -8,9 +8,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 
-@EnableCaching
+//@EnableCaching
 @SpringBootApplication
+@EnableRedisRepositories
 @EnableConfigurationProperties({ApplicationProperty.class, LiquibaseProperty.class, RedisProperty.class})
 public class KnowBaseServiceApplication {
     public static void main(String[] args) {
