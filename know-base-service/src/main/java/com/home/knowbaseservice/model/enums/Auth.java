@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Auth {
     AUTHORIZATION("Authorization", 13),
-    BEARER("Bearer ", 7);
+    BEARER("Bearer ", 7),
+    JWT("JWT", 3);
 
     private final String meaning;
     private final int length;

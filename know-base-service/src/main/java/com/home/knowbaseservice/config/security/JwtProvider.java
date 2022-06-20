@@ -12,10 +12,14 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
+import static com.home.knowbaseservice.model.enums.Auth.JWT;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtProvider {
+
+    private final String HEADER_TYPE = "typ";
 
     private final ApplicationProperty applicationProperty;
 
@@ -25,7 +29,7 @@ public class JwtProvider {
                 .setExpiration(date)
                 .setSubject(login)
                 .signWith(SignatureAlgorithm.HS256, applicationProperty.jwtSigningKey())
-                .setHeaderParam("typ", "JWT")
+                .setHeaderParam(HEADER_TYPE, JWT.getMeaning())
                 .compact();
     }
 

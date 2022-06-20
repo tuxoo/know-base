@@ -17,7 +17,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtFilter jwtFilter;
 
     private static final String[] AUTHORIZE_URIS = new String[]{
-            "/api/v1/user/sign-up", "/api/v1/user/sign-in"
+            "/api/v1/user/sign-up",
+            "/api/v1/user/sign-in"
     };
 
     @Override
