@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/user")
@@ -22,6 +24,11 @@ public class UserController {
         userService.signUp(signUpDTO);
     }
 
+    @PostMapping("/verify/{code}")
+    public void verifyUser(@PathVariable @NotBlank String code) {
+        userService.verifyUser(code);
+    }
+
     @PostMapping("/sign-in")
     public TokenDTO signIn(@RequestBody SignInDTO signInDTO) {
         return userService.signIn(signInDTO);
@@ -33,7 +40,7 @@ public class UserController {
     }
 
     @GetMapping("/{email}")
-    public UserDTO getUserByEmail(@PathVariable String email) {
+    public UserDTO getUserByEmail(@PathVariable @NotBlank String email) {
         return userService.getByLoginEmail(email);
     }
 }

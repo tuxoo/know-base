@@ -9,6 +9,7 @@ import com.home.knowbaseservice.model.dto.TokenDTO;
 import com.home.knowbaseservice.model.entity.User;
 import com.home.knowbaseservice.model.entity.UserDTO;
 import com.home.knowbaseservice.model.enums.Role;
+import com.home.knowbaseservice.model.exception.IllegalParameterException;
 import com.home.knowbaseservice.model.exception.InvalidCredentialException;
 import com.home.knowbaseservice.model.exception.UserNotFoundException;
 import com.home.knowbaseservice.model.mapper.UserMapper;
@@ -51,6 +52,21 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public void verifyUser(String code) {
+        UUID id;
+        try {
+            id = UUID.fromString(code);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalParameterException(String.format("verification code isn't UUID [%s]", code));
+        }
+        userRepository.findById(id).ifPresentOrElse(user -> {
+            user.setIsEnabled(true);
+            userRepository.save(user);
+            log.info(String.format("user [%s] has been verified", code));
+        }, () -> log.info(String.format("unregistered user [%s]", code)));
+    }
+
     @Transactional(readOnly = true)
     public UserDTO getUserProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -64,11 +80,15 @@ public class UserService {
 
         UserDTO user = userRepository.findByCredentials(signInDTO.email(), passwordHash)
                 .map(userMapper::toDTO)
-                .orElseThrow(() -> new InvalidCredentialException("User not found by credentials"));
+                .orElseThrow(() -> {
+                    log.error(String.format("user not found by credentials [%s, %s]", signInDTO.email(), signInDTO.password()));
+                    throw new InvalidCredentialException("User not found by credentials");
+                });
 
         userCache.save(user);
 
         String token = jwtProvider.generateToken(user.getId().toString());
+        log.info(String.format("user %s has signed in", user.getName()));
         return new TokenDTO(token);
     }
 

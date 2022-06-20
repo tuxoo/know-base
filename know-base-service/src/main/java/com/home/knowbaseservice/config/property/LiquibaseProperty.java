@@ -5,5 +5,8 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
 @ConfigurationProperties(prefix = "spring.liquibase")
-public record LiquibaseProperty(String defaultSchema, String changeLog) {
+public record LiquibaseProperty(
+        String defaultSchema,
+        String changeLog
+) {
 }
