@@ -96,7 +96,10 @@ public class UserService {
     public UserDTO getByLoginEmail(String email) {
         return userRepository.findActiveUserByLoginEmail(email)
                 .map(userMapper::toDTO)
-                .orElseThrow(() -> new UserNotFoundException("User not found by id"));
+                .orElseThrow(() -> {
+                    log.error(String.format("user not found by email [%s]", email));
+                    throw new UserNotFoundException("User not found by id");
+                });
     }
 
     @Transactional(readOnly = true)
@@ -104,6 +107,9 @@ public class UserService {
         Optional<UserDTO> user = userCache.findById(id.toString());
         return user.orElseGet(() -> userRepository.findById(id)
                 .map(userMapper::toDTO)
-                .orElseThrow(() -> new UserNotFoundException("User not found by id")));
+                .orElseThrow(() -> {
+                    log.error(String.format("user not found by id [%s]", id));
+                    throw new UserNotFoundException("User not found by id");
+                }));
     }
 }

@@ -1,8 +1,12 @@
 package com.home.knowbaseservice.config;
 
 import com.home.knowbaseservice.config.property.ApplicationProperty;
+import com.home.knowbaseservice.model.enums.Auth;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +24,9 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI openApi() {
-        OpenAPI openAPI = new OpenAPI().components(new Components());
+        OpenAPI openAPI = new OpenAPI().components(new Components().addSecuritySchemes(Auth.BEARER.getMeaning().strip(), new SecurityScheme().type(SecurityScheme.Type.APIKEY).in(SecurityScheme.In.HEADER).name(Auth.BEARER.getMeaning())))
+                .info(new Info().title("Know Base Application")
+                        .contact(new Contact().name("Eugene Krivtsov")).version("1.0.0"));
         if (StringUtils.isNoneBlank(applicationProperty.url())) {
             openAPI.servers(List.of(new Server().url(applicationProperty.url() + applicationProperty.apiPath())));
         }
@@ -30,8 +36,8 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
-                .group("common")
-                .pathsToMatch("/util/**")
+                .group("user")
+                .pathsToMatch("/api/v1/user/**")
                 .build();
     }
 }
