@@ -9,22 +9,22 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 4
+      maximum-pool-size: 5
       minimum-idle: 5
       idle-timeout: 30000
       max-lifetime: 2000000
       connection-timeout: 30000
-    url: ${POSTGRES_URL}?currentSchema=${POSTGRES_SCHEMA:kbase}
+    url: ${POSTGRES_URL}?currentSchema=${POSTGRES_SCHEMA:idler}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
   jpa:
     show-sql: ${SPRING_DEBUG:true}
-    hibernate:
-      ddl-auto: validate
+#    hibernate:
+#      ddl-auto: validate
   liquibase:
     enabled: true
     change-log: classpath:db/db.changelog-master.xml
-    default-schema: ${POSTGRES_SCHEMA:kbase}
+    default-schema: ${POSTGRES_SCHEMA:idler}
   redis:
     database: 0
     host: ${REDIS_HOST}

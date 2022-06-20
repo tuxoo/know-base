@@ -16,9 +16,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtFilter jwtFilter;
 
-//    private static final String[] AUTHORIZE_URIS = new String[]{
-//            , "/api/v1/user/sign-in"
-//    };
+    private static final String[] AUTHORIZE_URIS = new String[]{
+            "/api/v1/user/sign-up", "/api/v1/user/sign-in"
+    };
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -28,9 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/v1/user/sign-up").permitAll()
-//                .anyRequest()
-//                .authenticated()
+                .antMatchers(AUTHORIZE_URIS).permitAll()
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }

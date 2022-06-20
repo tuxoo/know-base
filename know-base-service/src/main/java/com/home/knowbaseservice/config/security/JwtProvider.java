@@ -1,6 +1,6 @@
 package com.home.knowbaseservice.config.security;
 
-import com.home.knowbaseservice.config.properties.ApplicationProperty;
+import com.home.knowbaseservice.config.property.ApplicationProperty;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

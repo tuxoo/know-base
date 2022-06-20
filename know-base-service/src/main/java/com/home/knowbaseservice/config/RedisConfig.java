@@ -1,6 +1,6 @@
 package com.home.knowbaseservice.config;
 
-import com.home.knowbaseservice.config.properties.RedisProperty;
+import com.home.knowbaseservice.config.property.RedisProperty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,21 +28,4 @@ public class RedisConfig {
         redisStandaloneConfiguration.setPassword(RedisPassword.of(redisProperty.password()));
         return new JedisConnectionFactory(redisStandaloneConfiguration);
     }
-
-//    @Bean
-//    public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer() {
-//        return builder -> builder
-//                .withCacheConfiguration("userTokenCache",
-//                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofHours(4)))
-//                .withCacheConfiguration("userCache",
-//                        RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofHours(4)));
-//    }
-//
-//    @Bean
-//    public RedisCacheConfiguration cacheConfiguration() {
-//        return RedisCacheConfiguration.defaultCacheConfig()
-//                .entryTtl(Duration.ofHours(6))
-//                .disableCachingNullValues()
-//                .serializeValuesWith(SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
-//    }
 }

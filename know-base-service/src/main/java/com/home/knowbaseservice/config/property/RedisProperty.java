@@ -1,4 +1,4 @@
-package com.home.knowbaseservice.config.properties;
+package com.home.knowbaseservice.config.property;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;

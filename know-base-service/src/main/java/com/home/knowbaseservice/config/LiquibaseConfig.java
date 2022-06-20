@@ -1,6 +1,6 @@
 package com.home.knowbaseservice.config;
 
-import com.home.knowbaseservice.config.properties.LiquibaseProperty;
+import com.home.knowbaseservice.config.property.LiquibaseProperty;
 import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
