@@ -17,9 +17,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtFilter jwtFilter;
 
     private static final String[] AUTHORIZE_URIS = new String[]{
-            "/api/v1/user/sign-up",
-            "/api/v1/user/sign-in",
-            "/api/v1/user/verify/**"
+            "/api/v1/user/sign-up/",
+            "/api/v1/user/sign-in/",
+            "/api/v1/user/verify/"
     };
 
     @Override
@@ -31,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(AUTHORIZE_URIS).permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }

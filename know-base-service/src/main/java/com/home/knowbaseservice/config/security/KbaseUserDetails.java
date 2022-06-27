@@ -1,6 +1,6 @@
 package com.home.knowbaseservice.config.security;
 
-import com.home.knowbaseservice.model.entity.UserDTO;
+import com.home.knowbaseservice.model.dto.UserDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,10 +18,10 @@ public class KbaseUserDetails implements UserDetails {
 
     public static KbaseUserDetails toKbaseUserDetails(UserDTO user) {
         KbaseUserDetails userDetails = new KbaseUserDetails();
-        userDetails.id = user.getId();
-        userDetails.login = user.getLoginEmail();
+        userDetails.id = user.id();
+        userDetails.login = user.loginEmail();
         userDetails.isEnabled = user.isEnabled();
-        userDetails.grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()));
+        userDetails.grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority(user.role().name()));
         return userDetails;
     }
 

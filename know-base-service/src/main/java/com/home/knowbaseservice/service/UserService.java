@@ -1,15 +1,12 @@
 package com.home.knowbaseservice.service;
 
-import com.home.knowbaseservice.cache.UserDTOCache;
+import com.github.benmanes.caffeine.cache.Cache;
 import com.home.knowbaseservice.config.security.JwtProvider;
 import com.home.knowbaseservice.config.security.KbaseUserDetails;
-import com.home.knowbaseservice.model.dto.SignInDTO;
-import com.home.knowbaseservice.model.dto.SignUpDTO;
-import com.home.knowbaseservice.model.dto.TokenDTO;
+import com.home.knowbaseservice.model.dto.*;
 import com.home.knowbaseservice.model.entity.User;
-import com.home.knowbaseservice.model.entity.UserDTO;
 import com.home.knowbaseservice.model.enums.Role;
-import com.home.knowbaseservice.model.exception.IllegalParameterException;
+import com.home.knowbaseservice.model.exception.IllegalCheckCodeException;
 import com.home.knowbaseservice.model.exception.InvalidCredentialException;
 import com.home.knowbaseservice.model.exception.UserNotFoundException;
 import com.home.knowbaseservice.model.mapper.UserMapper;
@@ -20,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -33,12 +29,11 @@ public class UserService {
 
     private final UserMapper userMapper;
     private final UserRepository userRepository;
-    private final UserDTOCache userCache;
+    private final Cache<UUID, UserDTO> userCache;
     private final JwtProvider jwtProvider;
 
-    @Transactional
     public void signUp(SignUpDTO signUpDTO) {
-        String passwordHash = HashUtils.HashSHA1(signUpDTO.password());
+        String passwordHash = HashUtils.hashSHA1(signUpDTO.password());
 
         User user = new User();
         user.setName(signUpDTO.name());
@@ -52,31 +47,26 @@ public class UserService {
         userRepository.save(user);
     }
 
-    @Transactional
-    public void verifyUser(String code) {
-        UUID id;
-        try {
-            id = UUID.fromString(code);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalParameterException(String.format("verification code isn't UUID [%s]", code));
+    public void verifyUser(VerifyDTO verifyDTO) {
+
+        Optional<User> optUser = userRepository.findUserByEmail(verifyDTO.email(), false);
+
+        if (optUser.isEmpty()) {
+            throw new UserNotFoundException("unknow user");
         }
-        userRepository.findById(id).ifPresentOrElse(user -> {
-            user.setIsEnabled(true);
-            userRepository.save(user);
-            log.info(String.format("user [%s] has been verified", code));
-        }, () -> log.info(String.format("unregistered user [%s]", code)));
+
+        User user = optUser.get();
+
+        if (!verifyDTO.checkCode().equals(HashUtils.hashSHA1(user.getName()))) {
+            throw new IllegalCheckCodeException("illegal check code");
+        }
+
+        user.setIsEnabled(true);
+        userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
-    public UserDTO getUserProfile() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        KbaseUserDetails details = (KbaseUserDetails) authentication.getPrincipal();
-        return getById(details.getId());
-    }
-
-    @Transactional(readOnly = true)
     public TokenDTO signIn(SignInDTO signInDTO) {
-        String passwordHash = HashUtils.HashSHA1(signInDTO.password());
+        String passwordHash = HashUtils.hashSHA1(signInDTO.password());
 
         UserDTO user = userRepository.findByCredentials(signInDTO.email(), passwordHash)
                 .map(userMapper::toDTO)
@@ -85,16 +75,20 @@ public class UserService {
                     throw new InvalidCredentialException("User not found by credentials");
                 });
 
-        userCache.save(user);
-
-        String token = jwtProvider.generateToken(user.getId().toString());
-        log.info(String.format("user %s has signed in", user.getName()));
+        userCache.put(user.id(), user);
+        String token = jwtProvider.generateToken(user.id().toString());
+        log.info(String.format("user %s has signed in", user.name()));
         return new TokenDTO(token);
     }
 
-    @Transactional(readOnly = true)
-    public UserDTO getByLoginEmail(String email) {
-        return userRepository.findActiveUserByLoginEmail(email)
+    public UserDTO getUserProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        KbaseUserDetails details = (KbaseUserDetails) authentication.getPrincipal();
+        return getById(details.getId());
+    }
+
+    public UserDTO getByEmail(String email) {
+        return userRepository.findUserByEmail(email, true)
                 .map(userMapper::toDTO)
                 .orElseThrow(() -> {
                     log.error(String.format("user not found by email [%s]", email));
@@ -102,14 +96,12 @@ public class UserService {
                 });
     }
 
-    @Transactional(readOnly = true)
     public UserDTO getById(UUID id) {
-        Optional<UserDTO> user = userCache.findById(id.toString());
-        return user.orElseGet(() -> userRepository.findById(id)
+        return userRepository.findById(id)
                 .map(userMapper::toDTO)
                 .orElseThrow(() -> {
                     log.error(String.format("user not found by id [%s]", id));
                     throw new UserNotFoundException("User not found by id");
-                }));
+                });
     }
 }

@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class IllegalParameterException extends RuntimeException {
+public class IllegalCheckCodeException extends RuntimeException {
 
-    public IllegalParameterException(String message) {
+    public IllegalCheckCodeException(String message) {
         super(message);
     }
 }

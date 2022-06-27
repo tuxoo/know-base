@@ -1,6 +1,6 @@
 package com.home.knowbaseservice.config.security;
 
-import com.home.knowbaseservice.model.entity.UserDTO;
+import com.home.knowbaseservice.model.dto.UserDTO;
 import com.home.knowbaseservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class KbaseUserDetailsService implements UserDetailsService {
 
     @Override
     public KbaseUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserDTO user = userService.getByLoginEmail(email);
+        UserDTO user = userService.getByEmail(email);
         return KbaseUserDetails.toKbaseUserDetails(user);
     }
 

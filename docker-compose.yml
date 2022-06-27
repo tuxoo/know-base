@@ -70,31 +70,17 @@ services:
 #      kbase-net:
 #        ipv4_address: 172.28.1.5
 
-  redis-kbase:
-    container_name: redis-kbase
-    image: redis:${REDIS_VERSION}
-    restart: unless-stopped
-    command: redis-server --include /usr/local/etc/redis/redis.conf
-    volumes:
-      - ./redis:/usr/local/etc/redis
-      - ./.docker-volumes/redis:/data
-    ports:
-      - ${REDIS_PORT}:6379
-    networks:
-      kbase-net:
-        ipv4_address: 172.28.1.6
-
   know-base-service:
     container_name: know-base-service
     build: know-base-service
-    restart: unless-stopped
+#    restart: unless-stopped
     env_file:
       - .env
     depends_on:
       - postgres-kbase
       - redis-kbase
     ports:
-      - "8080:8080"
+      - "9000:9000"
     networks:
       kbase-net:
         ipv4_address: 172.28.1.7

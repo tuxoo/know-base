@@ -1,9 +1,6 @@
 package com.home.knowbaseservice.controller;
 
-import com.home.knowbaseservice.model.dto.SignInDTO;
-import com.home.knowbaseservice.model.dto.SignUpDTO;
-import com.home.knowbaseservice.model.dto.TokenDTO;
-import com.home.knowbaseservice.model.entity.UserDTO;
+import com.home.knowbaseservice.model.dto.*;
 import com.home.knowbaseservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -29,7 +26,7 @@ public class UserController {
             })
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signUp(@RequestBody SignUpDTO signUpDTO) {
+    public void signUp(@RequestBody SignUpDTO signUpDTO) throws InterruptedException {
         userService.signUp(signUpDTO);
     }
 
@@ -38,9 +35,9 @@ public class UserController {
                     @ApiResponse(responseCode = "200", description = "Successful request", content = @Content(mediaType = "application/json")),
                     @ApiResponse(responseCode = "500", description = "Internal service error", content = @Content(mediaType = "application/json"))
             })
-    @PostMapping("/verify/{code}")
-    public void verifyUser(@PathVariable @NotBlank String code) {
-        userService.verifyUser(code);
+    @PostMapping("/verify")
+    public void verifyUser(@RequestBody VerifyDTO verifyDTO) {
+        userService.verifyUser(verifyDTO);
     }
 
     @Operation(summary = "Sign in user", description = "This method signs in new user",
@@ -70,7 +67,7 @@ public class UserController {
             }, security = {@SecurityRequirement(name = "Bearer")})
     @GetMapping("/{email}")
     public UserDTO getUserByEmail(@PathVariable @NotBlank String email) {
-        return userService.getByLoginEmail(email);
+        return userService.getByEmail(email);
     }
 }
 

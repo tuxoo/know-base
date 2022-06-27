@@ -1,22 +1,21 @@
 debug: ${SPRING_DEBUG:false}
 server:
-  port: ${APP_PORT:8080}
+  port: ${APP_PORT:9000}
   forward-headers-strategy: framework
 
 spring:
-  application:
-    name: kbase
   datasource:
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 5
-      minimum-idle: 5
-      idle-timeout: 30000
-      max-lifetime: 2000000
-      connection-timeout: 30000
-    url: ${POSTGRES_URL}?currentSchema=${POSTGRES_SCHEMA:idler}
+      maximum-pool-size: 25
+      minimum-idle: 2
+      idle-timeout: 300000
+      max-lifetime: 120000
+    url: ${POSTGRES_URL}?currentSchema=${POSTGRES_SCHEMA:kbase}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
+  application:
+    name: kbase
   jpa:
     show-sql: ${SPRING_DEBUG:true}
     hibernate:
@@ -25,17 +24,14 @@ spring:
     enabled: true
     change-log: classpath:db/db.changelog-master.xml
     default-schema: ${POSTGRES_SCHEMA:kbase}
-  redis:
-    database: 0
-    host: ${REDIS_HOST}
-    port: ${REDIS_PORT}
-    password: ${REDIS_PASSWORD}
+
+cache:
+  user-maximum-size: 100000
+  user-expired-time-hours: 4
 
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
-#  api-docs:
-#    path: /api-docs
 
 management:
   endpoint:

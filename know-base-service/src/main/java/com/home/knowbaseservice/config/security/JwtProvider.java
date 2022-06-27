@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -24,8 +25,7 @@ public class JwtProvider {
     private final ApplicationProperty property;
 
     public String generateToken(String login) {
-        Date expiredDate = Date.from(LocalDateTime.now().plusHours(property.tokenTTL()).toLocalDate()
-                .atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date expiredDate = Date.from(LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
         return Jwts.builder()
                 .setExpiration(expiredDate)
                 .setSubject(login)
