@@ -2,6 +2,9 @@ debug: ${SPRING_DEBUG:false}
 server:
   port: ${APP_PORT:9000}
   forward-headers-strategy: framework
+  tomcat:
+    threads:
+      max: 5000
 
 spring:
   datasource:
