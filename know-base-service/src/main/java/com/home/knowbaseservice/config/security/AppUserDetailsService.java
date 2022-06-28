@@ -13,18 +13,18 @@ import java.util.UUID;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KbaseUserDetailsService implements UserDetailsService {
+public class AppUserDetailsService implements UserDetailsService {
 
     private final UserService userService;
 
     @Override
-    public KbaseUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public AppUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserDTO user = userService.getByEmail(email);
-        return KbaseUserDetails.toKbaseUserDetails(user);
+        return AppUserDetails.toKbaseUserDetails(user);
     }
 
-    public KbaseUserDetails loadUserById(UUID id) throws UsernameNotFoundException {
+    public AppUserDetails loadUserById(UUID id) throws UsernameNotFoundException {
         UserDTO user = userService.getById(id);
-        return KbaseUserDetails.toKbaseUserDetails(user);
+        return AppUserDetails.toKbaseUserDetails(user);
     }
 }

@@ -24,14 +24,14 @@ import static org.springframework.util.StringUtils.hasText;
 public class JwtFilter extends GenericFilterBean {
 
     private final JwtProvider jwtProvider;
-    private final KbaseUserDetailsService userDetailsService;
+    private final AppUserDetailsService userDetailsService;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         String token = getTokenFromRequest((HttpServletRequest) servletRequest);
         if (token != null && jwtProvider.validateToken(token)) {
             String userId = jwtProvider.getUserIdFromToken(token);
-            KbaseUserDetails userDetails = userDetailsService.loadUserById(UUID.fromString(userId));
+            AppUserDetails userDetails = userDetailsService.loadUserById(UUID.fromString(userId));
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }

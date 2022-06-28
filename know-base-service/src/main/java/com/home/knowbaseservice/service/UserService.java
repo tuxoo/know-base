@@ -2,7 +2,7 @@ package com.home.knowbaseservice.service;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.home.knowbaseservice.config.security.JwtProvider;
-import com.home.knowbaseservice.config.security.KbaseUserDetails;
+import com.home.knowbaseservice.config.security.AppUserDetails;
 import com.home.knowbaseservice.model.dto.*;
 import com.home.knowbaseservice.model.entity.User;
 import com.home.knowbaseservice.model.enums.Role;
@@ -84,7 +84,7 @@ public class UserService {
 
     public UserDTO getUserProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        KbaseUserDetails details = (KbaseUserDetails) authentication.getPrincipal();
+        AppUserDetails details = (AppUserDetails) authentication.getPrincipal();
         return getById(details.getId());
     }
 

@@ -9,15 +9,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 
-public class KbaseUserDetails implements UserDetails {
+public class AppUserDetails implements UserDetails {
 
     private UUID id;
     private String login;
     private Boolean isEnabled;
     private Collection<? extends GrantedAuthority> grantedAuthorities;
 
-    public static KbaseUserDetails toKbaseUserDetails(UserDTO user) {
-        KbaseUserDetails userDetails = new KbaseUserDetails();
+    public static AppUserDetails toKbaseUserDetails(UserDTO user) {
+        AppUserDetails userDetails = new AppUserDetails();
         userDetails.id = user.id();
         userDetails.login = user.loginEmail();
         userDetails.isEnabled = user.isEnabled();
