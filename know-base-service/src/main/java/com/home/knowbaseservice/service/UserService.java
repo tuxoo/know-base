@@ -99,7 +99,7 @@ public class UserService {
 
     public UserDTO getById(UUID id) {
         return userCache.get(id, key ->
-                userRepository.findById(id)
+                userRepository.findActiveById(id)
                         .map(userMapper::toDTO)
                         .orElseThrow(() -> {
                             log.error(String.format("user not found by id [%s]", id));
