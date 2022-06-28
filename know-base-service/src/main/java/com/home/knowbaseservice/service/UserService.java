@@ -103,11 +103,13 @@ public class UserService {
     }
 
     public UserDTO getById(UUID id) {
-        return userRepository.findById(id)
-                .map(userMapper::toDTO)
-                .orElseThrow(() -> {
-                    log.error(String.format("user not found by id [%s]", id));
-                    throw new UserNotFoundException("User not found by id");
-                });
+        return userCache.get(id, key ->
+                userRepository.findById(id)
+                        .map(userMapper::toDTO)
+                        .orElseThrow(() -> {
+                            log.error(String.format("user not found by id [%s]", id));
+                            throw new UserNotFoundException("User not found by id");
+                        })
+        );
     }
 }
