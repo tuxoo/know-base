@@ -59,10 +59,6 @@ public class UserService {
 
         User user = optUser.get();
 
-        if (Boolean.TRUE.equals(user.getIsEnabled())) {
-            throw new UserAlreadyActiveException("user already active");
-        }
-
         if (!verifyDTO.checkCode().equals(hashService.hashSHA1(user.getName()))) {
             throw new IllegalCheckCodeException("illegal check code");
         }
