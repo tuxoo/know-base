@@ -14,7 +14,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("""
             SELECT u FROM User  u WHERE u.loginEmail=:email AND u.isEnabled=:isEnabled
             """)
-    Optional<User> findUserByEmail(String email, Boolean isEnabled);
+    Optional<User> findByEmail(String email, Boolean isEnabled);
 
     @Query("""
             SELECT u FROM User u WHERE u.loginEmail=:email AND u.passwordHash=:passwordHash AND u.isEnabled=true

@@ -4,7 +4,7 @@ services:
   postgres-kbase:
     container_name: postgres-kbase
     image: postgres:${POSTGRES_VERSION}
-    restart: unless-stopped
+    restart: on-failure
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -18,72 +18,36 @@ services:
       - ${POSTGRES_PORT}:5432
     networks:
       kbase-net:
-        ipv4_address: 172.28.1.2
+        ipv4_address: 172.28.1.1
 
-#  temporal-kbase:
-#    container_name: temporal-kbase
-#    image: temporalio/auto-setup:${TEMPORAL_VERSION}
-#    restart: unless-stopped
-#    environment:
-#      DB: kbase
-#      DB_PORT: ${POSTGRES_PORT}
-#      POSTGRES_USER: ${POSTGRES_USER}
-#      POSTGRES_PWD: ${POSTGRES_PASSWORD}
-#      POSTGRES_SEEDS: postgres
-#      DYNAMIC_CONFIG_FILE_PATH: config/temporal/dynamicconfig/development-sql.yaml
-#    depends_on:
-#      - postgres-kbase
-#    volumes:
-#      - ./temporal/dynamicconfig:/etc/temporal/config/dynamicconfig
-#    ports:
-#      - ${TEMPORAL_IO_PORT}:7233
-#    networks:
-#      kbase-net:
-#        ipv4_address: 172.28.1.3
-#
-#  temporal-admin-tools-kbase:
-#    container_name: temporal-admin-tools-kbase
-#    image: temporalio/admin-tools:${TEMPORAL_VERSION}
-#    restart: unless-stopped
-#    environment:
-#      TEMPORAL_CLI_ADDRESS: temporal-kbase:${TEMPORAL_IO_PORT}
-#    depends_on:
-#      - temporal-kbase
-#    networks:
-#      kbase-net:
-#        ipv4_address: 172.28.1.4
-#    stdin_open: true
-#    tty: true
-#
-#  temporal-web-kbase:
-#    container_name: temporal-web-kbase
-#    image: temporalio/web:${TEMPORAL_WEB_VERSION}
-#    restart: unless-stopped
-#    environment:
-#      TEMPORAL_GRPC_ENDPOINT: temporal-kbase:${TEMPORAL_IO_PORT}
-#      TEMPORAL_PERMIT_WRITE_API: true
-#    depends_on:
-#      - temporal-kbase
-#    ports:
-#      - ${TEMPORAL_WEB_PORT}:8088
-#    networks:
-#      kbase-net:
-#        ipv4_address: 172.28.1.5
+  liquibase-kbase:
+    container_name: liquibase-kbase
+    image: liquibase/liquibase:${LIQUIBASE_VERSION}
+    restart: on-failure
+    command: --defaultsFile=liquibase.properties update
+    depends_on:
+      - postgres-kbase
+    volumes:
+      - ./db/:/liquibase/changelog/
+      - ./db/:/liquibase/classpath/
+      - ./db/liquibase.properties:/liquibase/liquibase.properties
+    networks:
+      kbase-net:
+        ipv4_address: 172.28.1.2
 
   know-base-service:
     container_name: know-base-service
     build: know-base-service
-#    restart: unless-stopped
+    restart: on-failure
     env_file:
       - .env
     depends_on:
       - postgres-kbase
-      - redis-kbase
     ports:
-      - "9000:9000"
+      - ${APP_PORT}:9000
     networks:
       kbase-net:
-        ipv4_address: 172.28.1.7
+        ipv4_address: 172.28.1.3
 
 networks:
   kbase-net:

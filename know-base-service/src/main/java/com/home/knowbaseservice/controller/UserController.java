@@ -26,7 +26,7 @@ public class UserController {
             })
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signUp(@RequestBody SignUpDTO signUpDTO) throws InterruptedException {
+    public void signUp(@RequestBody SignUpDTO signUpDTO) {
         userService.signUp(signUpDTO);
     }
 

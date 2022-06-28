@@ -8,10 +8,11 @@ import com.home.knowbaseservice.model.entity.User;
 import com.home.knowbaseservice.model.enums.Role;
 import com.home.knowbaseservice.model.exception.IllegalCheckCodeException;
 import com.home.knowbaseservice.model.exception.InvalidCredentialException;
+import com.home.knowbaseservice.model.exception.UserAlreadyActiveException;
 import com.home.knowbaseservice.model.exception.UserNotFoundException;
 import com.home.knowbaseservice.model.mapper.UserMapper;
 import com.home.knowbaseservice.repository.UserRepository;
-import com.home.knowbaseservice.util.HashUtils;
+import com.home.knowbaseservice.util.HashService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -31,9 +32,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final Cache<UUID, UserDTO> userCache;
     private final JwtProvider jwtProvider;
+    private final HashService hashService;
 
     public void signUp(SignUpDTO signUpDTO) {
-        String passwordHash = HashUtils.hashSHA1(signUpDTO.password());
+        String passwordHash = hashService.hashSHA1(signUpDTO.password());
 
         User user = new User();
         user.setName(signUpDTO.name());
@@ -49,15 +51,19 @@ public class UserService {
 
     public void verifyUser(VerifyDTO verifyDTO) {
 
-        Optional<User> optUser = userRepository.findUserByEmail(verifyDTO.email(), false);
+        Optional<User> optUser = userRepository.findByEmail(verifyDTO.email(), false);
 
         if (optUser.isEmpty()) {
-            throw new UserNotFoundException("unknow user");
+            throw new UserNotFoundException("unknown user");
         }
 
         User user = optUser.get();
 
-        if (!verifyDTO.checkCode().equals(HashUtils.hashSHA1(user.getName()))) {
+        if (Boolean.TRUE.equals(user.getIsEnabled())) {
+            throw new UserAlreadyActiveException("user already active");
+        }
+
+        if (!verifyDTO.checkCode().equals(hashService.hashSHA1(user.getName()))) {
             throw new IllegalCheckCodeException("illegal check code");
         }
 
@@ -66,7 +72,7 @@ public class UserService {
     }
 
     public TokenDTO signIn(SignInDTO signInDTO) {
-        String passwordHash = HashUtils.hashSHA1(signInDTO.password());
+        String passwordHash = hashService.hashSHA1(signInDTO.password());
 
         UserDTO user = userRepository.findByCredentials(signInDTO.email(), passwordHash)
                 .map(userMapper::toDTO)
@@ -88,7 +94,7 @@ public class UserService {
     }
 
     public UserDTO getByEmail(String email) {
-        return userRepository.findUserByEmail(email, true)
+        return userRepository.findByEmail(email, true)
                 .map(userMapper::toDTO)
                 .orElseThrow(() -> {
                     log.error(String.format("user not found by email [%s]", email));

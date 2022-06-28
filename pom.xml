@@ -23,12 +23,10 @@
         <org.projectlombok.version>1.18.24</org.projectlombok.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <com.vladmihalcea.version>2.16.2</com.vladmihalcea.version>
-        <org.liquibase.version>4.10.0</org.liquibase.version>
         <org.apache.commons.version>4.4</org.apache.commons.version>
         <io.swagger.core.v3.version>2.2.0</io.swagger.core.v3.version>
         <org.springdoc.version>1.6.8</org.springdoc.version>
         <com.fasterxml.jackson.core.version>2.13.3</com.fasterxml.jackson.core.version>
-        <redis.clients.version>4.2.3</redis.clients.version>
     </properties>
 
     <modules>
