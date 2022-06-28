@@ -8,7 +8,6 @@ import com.home.knowbaseservice.model.entity.User;
 import com.home.knowbaseservice.model.enums.Role;
 import com.home.knowbaseservice.model.exception.IllegalCheckCodeException;
 import com.home.knowbaseservice.model.exception.InvalidCredentialException;
-import com.home.knowbaseservice.model.exception.UserAlreadyActiveException;
 import com.home.knowbaseservice.model.exception.UserNotFoundException;
 import com.home.knowbaseservice.model.mapper.UserMapper;
 import com.home.knowbaseservice.repository.UserRepository;

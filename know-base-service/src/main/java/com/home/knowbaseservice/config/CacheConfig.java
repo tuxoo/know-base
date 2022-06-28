@@ -17,18 +17,6 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class CacheConfig {
 
-//    @Bean
-//    public Caffeine caffeineConfig() {
-//        return Caffeine.newBuilder().expireAfterWrite(60, TimeUnit.MINUTES);
-//    }
-//
-//    @Bean
-//    public CacheManager cacheManager(Caffeine caffeine) {
-//        CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager();
-//        caffeineCacheManager.setCaffeine(caffeine);
-//        return caffeineCacheManager;
-//    }
-
     private final CacheProperty cacheProperty;
 
     @Bean
