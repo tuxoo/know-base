@@ -28,10 +28,6 @@ cache:
   user-maximum-size: 100000
   user-expired-time-hours: 4
 
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-
 management:
   endpoint:
     health:

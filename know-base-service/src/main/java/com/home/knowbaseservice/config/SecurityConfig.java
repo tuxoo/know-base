@@ -19,7 +19,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] AUTHORIZE_URIS = new String[]{
             "/api/v1/user/sign-up/",
             "/api/v1/user/sign-in/",
-            "/api/v1/user/verify/"
+            "/api/v1/user/verify/",
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
     };
 
     @Override
