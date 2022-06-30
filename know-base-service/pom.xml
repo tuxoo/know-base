@@ -21,6 +21,8 @@
 		<io.swagger.core.v3.version>2.2.0</io.swagger.core.v3.version>
 		<org.springdoc.version>1.6.9</org.springdoc.version>
 		<com.fasterxml.jackson.core.version>2.13.3</com.fasterxml.jackson.core.version>
+		<io.jsonwebtoken.version>0.9.1</io.jsonwebtoken.version>
+		<io.micrometer.version>1.9.1</io.micrometer.version>
 	</properties>
 
 	<dependencies>
@@ -72,6 +74,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+			<version>${io.micrometer.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>${org.projectlombok.version}</version>
@@ -89,7 +96,7 @@
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
-			<version>0.9.1</version>
+			<version>${io.jsonwebtoken.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springdoc</groupId>

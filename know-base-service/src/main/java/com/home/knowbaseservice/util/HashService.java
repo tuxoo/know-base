@@ -17,19 +17,15 @@ public class HashService {
     @Value("${app.salt}")
     private String salt;
     private final String SHA1 = "SHA-1";
-    private MessageDigest mdSHA1;
 
-    @PostConstruct
-    private void createDigest() {
+    public String hashSHA1(String password) {
+        MessageDigest mdSHA1;
         try {
             mdSHA1 = MessageDigest.getInstance(SHA1);
         } catch (NoSuchAlgorithmException e) {
             throw new HashException(e);
         }
-    }
-
-    public String hashSHA1(String password) {
-        mdSHA1.update(salt.getBytes(StandardCharsets.UTF_8));
+//        mdSHA1.update(salt.getBytes(StandardCharsets.UTF_8));
         byte[] bytes = mdSHA1.digest(password.getBytes(StandardCharsets.UTF_8));
         StringBuilder sb = new StringBuilder();
         for (byte b : bytes)

@@ -2,7 +2,6 @@ package com.home.knowbaseservice.advice;
 
 import com.home.knowbaseservice.model.error.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,7 +22,7 @@ public class ExceptionHandlerController {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
         log.error("Handle exception [{}]", e.getMessage());
-        HttpStatus status = Optional.ofNullable(e.getClass().getAnnotation(ResponseStatus.class)).map(ResponseStatus::code)
+        HttpStatus status = Optional.ofNullable(e.getClass().getAnnotation(ResponseStatus.class)).map(ResponseStatus::value)
                 .orElse(HttpStatus.INTERNAL_SERVER_ERROR);
         ErrorResponse responseBody = new ErrorResponse(e.getMessage(), formatter.format(Instant.now()));
 
