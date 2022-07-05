@@ -10,8 +10,8 @@ For application need EnvFile by Borys Pierov plugin and .env file which contains
 ```dotenv
 POSTGRES_VERSION=14
 POSTGRES_PORT=[your postgres port here]
-POSTGRES_SCHEMA=[your postgres schema here]
-POSTGRES_DB=[your postgres db here]
+POSTGRES_SCHEMA=kbase
+POSTGRES_DB=kbase
 POSTGRES_USER=[your postgres user here]
 POSTGRES_PASSWORD=[your postgres password here]
 
@@ -28,7 +28,11 @@ PROMETHEUS_PORT=[your prometheus port here]
 PASSWORD_SALT=[your salt here]
 JWT_SIGNING_KEY=[your signing key here]
 ```
-
+For successfully running liquibase need to append in db/liquibase.properties:
+```dotenv
+username: [your postgres user here]
+password: [your postgres password here]
+```
 For running application need to build:
 ```dotenv
 mvn install -DskipTests
