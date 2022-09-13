@@ -64,8 +64,39 @@ services:
       kbase-net:
         ipv4_address: 172.28.1.4
 
-  know-base-service:
-    container_name: know-base-service
+  minio-kbase:
+    image: minio/minio
+    container_name: minio-kbase
+    restart: on-failure
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+    command: minio server --console-address ":9001" /data
+    ports:
+      - ${MINIO_PORT}:9000
+      - ${MINIO_PORT_1}:9001
+    volumes:
+      - ./.docker-volumes/minio:/data
+    networks:
+      kbase-net:
+        ipv4_address: 172.28.1.5
+
+  kbase-gateway-service:
+    container_name: kbase-gateway-service
+    build: know-base-gateway-service
+    restart: on-failure
+    env_file:
+      - .env
+    depends_on:
+      - kbase-service
+    ports:
+      - ${GATEWAY_PORT}:8080
+    networks:
+      kbase-net:
+        ipv4_address: 172.28.1.6
+
+  kbase-service:
+    container_name: kbase-service
     build: know-base-service
     restart: on-failure
     env_file:
@@ -73,24 +104,22 @@ services:
     depends_on:
       - postgres-kbase
     ports:
-      - ${APP_PORT}:9000
+      - ${SERVICE_PORT}:9000
     networks:
       kbase-net:
-        ipv4_address: 172.28.1.5
+        ipv4_address: 172.28.1.7
 
-  know-base-gateway-service:
-    container_name: know-base-gateway-service
-    build: know-base-gateway-service
+  kbase-storage:
+    container_name: kbase-storage
+    build: know-base-storage-service
     restart: on-failure
     env_file:
       - .env
-    depends_on:
-      - know-base-service
     ports:
-      - ${GATEWAY_PORT}:8080
+      - ${STORAGE_PORT}:8082
     networks:
       kbase-net:
-        ipv4_address: 172.28.1.6
+        ipv4_address: 172.28.1.8
 
 networks:
   kbase-net:

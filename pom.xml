@@ -32,6 +32,7 @@
     <modules>
         <module>know-base-service</module>
         <module>know-base-gateway-service</module>
+        <module>know-base-storage-service</module>
     </modules>
 
     <dependencyManagement>

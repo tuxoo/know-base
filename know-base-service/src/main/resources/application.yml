@@ -1,6 +1,6 @@
 debug: ${SPRING_DEBUG:false}
 server:
-  port: ${APP_PORT:9000}
+  port: ${SERVICE_PORT:8080}
   forward-headers-strategy: framework
   tomcat:
     threads:
@@ -48,8 +48,8 @@ management:
     git:
       mode: full
 
-app:
-  url: ${APP_URL}
+application:
+  url: http://localhost:${SERVICE_PORT:8080}
   api-path: ${API_PATH:/}
   salt: ${HASH_SALT}
   jwt-signing-key: ${JWT_SIGNING_KEY}

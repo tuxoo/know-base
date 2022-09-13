@@ -14,7 +14,7 @@ import java.security.NoSuchAlgorithmException;
 @RequiredArgsConstructor
 public class HashService {
 
-    @Value("${app.salt}")
+    @Value("${application.salt}")
     private String salt;
     private final String SHA1 = "SHA-1";
 
