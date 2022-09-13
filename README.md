@@ -63,3 +63,7 @@ Swagger documentation
 ```dotenv
 http://localhost:8081/swagger-ui/index.html
 ```
+Grafana metrics
+```dotenv
+http://localhost:3000/
+```
