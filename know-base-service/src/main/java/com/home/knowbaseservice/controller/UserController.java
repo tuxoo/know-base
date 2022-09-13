@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/user")
+@RequestMapping("/know-base/users")
 public class UserController {
 
     private final UserService userService;

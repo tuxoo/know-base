@@ -25,7 +25,7 @@ public class HashService {
         } catch (NoSuchAlgorithmException e) {
             throw new HashException(e);
         }
-//        mdSHA1.update(salt.getBytes(StandardCharsets.UTF_8));
+        mdSHA1.update(salt.getBytes(StandardCharsets.UTF_8));
         byte[] bytes = mdSHA1.digest(password.getBytes(StandardCharsets.UTF_8));
         StringBuilder sb = new StringBuilder();
         for (byte b : bytes)
